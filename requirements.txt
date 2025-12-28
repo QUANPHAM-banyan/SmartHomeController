@@ -1,0 +1,19 @@
+# Smart Home Controller - Requirements
+
+# Không có external dependencies!
+# Tất cả sử dụng Python built-in libraries:
+# - tkinter (GUI framework) - built-in
+# - threading (Timer system) - built-in
+# - abc (Abstract Base Classes) - built-in
+# - typing (Type hints) - built-in
+# - dataclasses (Data structures) - built-in (Python 3.7+)
+# - datetime (Time handling) - built-in
+
+# Yêu cầu hệ thống:
+# Python >= 3.8
+
+# Để chạy trên Linux, có thể cần cài:
+# sudo apt-get install python3-tk
+
+# Không cần chạy pip install!
+# Chỉ cần: python main.py
