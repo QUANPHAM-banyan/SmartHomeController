@@ -9,7 +9,7 @@ from simulation.fan_simulator import Fan
 from simulation.door_simulator import Door
 from application.device_controller import DeviceController
 from application.timer_manager import TimerManager
-from presentation.gui import MainWindow
+from presentation.main_window import MainWindow
 
 
 def create_sample_devices(controller):
