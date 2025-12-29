@@ -265,17 +265,20 @@ class MainWindow(tk.Tk, Observer):
         main_container = ttk.Frame(self)
         main_container.pack(fill="both", expand=True, padx=10, pady=10)
         
-        # Top part - Room visualization
-        room_frame = ttk.LabelFrame(main_container, text="📍 Sơ đồ phòng", padding="10")
-        room_frame.pack(fill="x", pady=(0, 10))
-        room_frame.configure(height=300)
+        # Use PanedWindow to allow resizing between room view and controls
+        main_paned = ttk.PanedWindow(main_container, orient="vertical")
+        main_paned.pack(fill="both", expand=True)
+        
+        # Top part - Room visualization (resizable)
+        room_frame = ttk.LabelFrame(main_paned, text="📍 Sơ đồ phòng", padding="10")
+        main_paned.add(room_frame, weight=1)
         
         self.room_canvas = RoomCanvas(room_frame, self.controller, self.current_room)
         self.room_canvas.pack(fill="both", expand=True)
         
         # Bottom part - Controls
-        controls_container = ttk.Frame(main_container)
-        controls_container.pack(fill="both", expand=True)
+        controls_container = ttk.Frame(main_paned)
+        main_paned.add(controls_container, weight=2)
         
         # Left side - Device controls (pack FIRST to avoid z-order overlap)
         left_frame = ttk.Frame(controls_container)

@@ -311,7 +311,7 @@ class RoomCanvas(ttk.Frame):
         # Calculate floor dimensions
         floor_margin = 50
         device_margin_x = 150
-        device_margin_y = 100
+        device_margin_y = 70
         
         floor_width = canvas_width - 2 * floor_margin
         floor_height = canvas_height - 2 * floor_margin
@@ -325,39 +325,53 @@ class RoomCanvas(ttk.Frame):
         # Calculate how many devices can fit per row
         max_per_row = max(1, (available_width + min_spacing) // min_spacing)
         
-        # Fill row 1 first, then row 2 when row 1 is full
-        row1_count = min(count, max_per_row)
-        row2_count = count - row1_count
+        # Calculate number of rows needed
+        import math
+        num_rows = math.ceil(count / max_per_row)
         
-        # Calculate vertical positions
-        spacing_y = 100  # Fixed spacing between 2 rows
+        # Calculate vertical spacing
+        spacing_y = 100  # Fixed spacing between rows
         start_x = floor_margin + device_margin_x
         start_y = floor_margin + device_margin_y
-        center_x = canvas_width // 2
         
-        # Calculate positions for row 1 (top row) - fill first
-        if row1_count > 0:
-            spacing_x_row1 = (available_width // max(1, row1_count - 1)) if row1_count > 1 else 0
-            spacing_x_row1 = max(spacing_x_row1, min_spacing)
-            for i in range(row1_count):
-                x = start_x + i * spacing_x_row1 if row1_count > 1 else center_x
-                y = start_y
-                positions.append((x, y))
+        # Calculate fixed horizontal spacing based on max_per_row
+        spacing_x = (available_width // max(1, max_per_row - 1)) if max_per_row > 1 else 0
+        spacing_x = max(spacing_x, min_spacing)
         
-        # Calculate positions for row 2 (bottom row) - fill when row 1 is full
-        if row2_count > 0:
-            spacing_x_row2 = (available_width // max(1, row2_count - 1)) if row2_count > 1 else 0
-            spacing_x_row2 = max(spacing_x_row2, min_spacing)
-            for i in range(row2_count):
-                x = start_x + i * spacing_x_row2 if row2_count > 1 else center_x
-                y = start_y + spacing_y
-                positions.append((x, y))
-            for i in range(row1_count):
-                x = start_x + i * spacing_x_row1 if row1_count > 1 else center_x
-                y = start_y
-                positions.append((x, y))
+        # Place devices in grid layout (unlimited rows, left to right)
+        for i in range(count):
+            row = i // max_per_row
+            col = i % max_per_row
+            
+            # Calculate x position (always from left to right)
+            x = start_x + col * spacing_x
+            
+            # Calculate y position
+            y = start_y + row * spacing_y
+            
+            positions.append((x, y))
         
         return positions
+    
+    def _get_light_color(self, device):
+        """Tính màu cho đèn dựa trên độ sáng.
+        
+        Args:
+            device: Đối tượng thiết bị đèn
+            
+        Returns:
+            Màu RGB hex string
+        """
+        if not device.is_on:
+            return 'gray'
+        
+        # Tính màu vàng dựa trên độ sáng (0-100)
+        brightness = getattr(device, 'brightness', 100)
+        # Từ màu vàng đậm (255, 255, 0) đến vàng nhạt theo brightness
+        r = 255
+        g = 255
+        b = int(255 * (1 - brightness / 100))  # Giảm blue theo độ sáng
+        return f'#{r:02x}{g:02x}{b:02x}'
     
     def _create_device_icon(self, device, x, y):
         """Tạo icon cho thiết bị.
@@ -377,11 +391,17 @@ class RoomCanvas(ttk.Frame):
         
         icon, color_on, color_off = icons.get(device_type, ('🔌', 'green', 'gray'))
         
+        # Get color based on device state
+        if device_type == 'light':
+            fill_color = self._get_light_color(device)
+        else:
+            fill_color = color_on if device.is_on else color_off
+        
         # Draw circle background
         r = 30
         circle = self.canvas.create_oval(
             x - r, y - r, x + r, y + r,
-            fill=color_on if device.is_on else color_off,
+            fill=fill_color,
             outline="black", width=2
         )
         
@@ -403,7 +423,7 @@ class RoomCanvas(ttk.Frame):
             'label': label_id,
             'color_on': color_on,
             'color_off': color_off,
-            'device': device
+            'device_type': device_type
         }
         
         # Bind click events
@@ -463,7 +483,12 @@ class RoomCanvas(ttk.Frame):
             return
         
         icon_data = self.device_icons[device_id]
-        color = icon_data['color_on'] if device.is_on else icon_data['color_off']
+        
+        # Get color based on device type
+        if icon_data.get('device_type') == 'light':
+            color = self._get_light_color(device)
+        else:
+            color = icon_data['color_on'] if device.is_on else icon_data['color_off']
         
         self.canvas.itemconfig(icon_data['circle'], fill=color)
     

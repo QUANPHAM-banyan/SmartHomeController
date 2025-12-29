@@ -141,7 +141,7 @@ class DeviceControlPanel(ttk.Frame):
         """Xử lý thay đổi độ sáng."""
         level = int(self.brightness_var.get())
         self.brightness_label.config(text=f"{level}%")
-        self.controller.control_device(self.device_id, "set_brightness", {"level": level})
+        self.controller.control_device(self.device_id, "set_brightness", {"brightness": level})
     
     def _set_speed(self, speed):
         """Đặt tốc độ quạt."""

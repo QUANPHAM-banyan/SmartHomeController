@@ -109,7 +109,7 @@ class DeviceController:
                 result = device.turn_off()
             elif command == "set_brightness":
                 if hasattr(device, 'set_brightness'):
-                    result = device.set_brightness(params.get('level', 100))
+                    result = device.set_brightness(params.get('brightness', 100))
                 else:
                     print(f"❌ Thiết bị {device.name} không hỗ trợ set_brightness")
                     return False
