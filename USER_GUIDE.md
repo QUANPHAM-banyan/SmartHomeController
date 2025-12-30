@@ -1,10 +1,21 @@
 # 📖 Hướng dẫn sử dụng Smart Home Controller
 
+
 ## 🚀 Khởi động ứng dụng
+
 
 ```bash
 python main.py
 ```
+
+---
+
+## 🆕 Tính năng giao diện mới
+
+- Sơ đồ phòng (Room Visualization) không giới hạn số hàng thiết bị, tự động xuống dòng
+- Có thể resize chiều cao sơ đồ phòng bằng chuột (kéo thanh chia)
+- Các thiết bị xếp từ trái sang phải
+- Đồng bộ trạng thái thiết bị giữa popup, panel, sơ đồ phòng
 
 Giao diện chính sẽ hiển thị với:
 - **Sơ đồ phòng**: Hiển thị thiết bị trực quan ở phía trên

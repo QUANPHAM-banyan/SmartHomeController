@@ -21,7 +21,8 @@ Hệ thống được thiết kế theo **Layered Architecture** với 3 lớp:
 ```
 ┌─────────────────────────────────────┐
 │   PRESENTATION LAYER (GUI)         │
-│   - gui.py                         │
+│   - main_window.py                 │
+│   - dialogs/, panels/ (modular GUI)│
 │   - room_visualization.py          │
 └─────────────┬───────────────────────┘
               │
@@ -69,7 +70,16 @@ SmartHomeController/
 │
 └── presentation/               # Lớp giao diện
     ├── __init__.py
-    ├── gui.py                 # Giao diện chính
+    ├── main_window.py         # Cửa sổ chính (GUI)
+    ├── dialogs/               # Dialogs (thêm/xóa/quản lý phòng)
+    │    ├── __init__.py
+    │    ├── add_device_dialog.py
+    │    ├── delete_device_dialog.py
+    │    └── room_manager_dialog.py
+    ├── panels/                # Panels (điều khiển thiết bị, timer)
+    │    ├── __init__.py
+    │    ├── device_control_panel.py
+    │    └── timer_panel.py
     └── room_visualization.py  # Hiển thị sơ đồ phòng
 ```
 
@@ -89,7 +99,18 @@ cd SmartHomeController
 python main.py
 ```
 
+
 **Không cần cài đặt gì thêm!** Tất cả đều dùng thư viện built-in của Python.
+
+---
+
+## 🆕 Tính năng giao diện mới
+
+- Giao diện chia module: dễ bảo trì, mở rộng
+- Sơ đồ phòng (Room Visualization) không giới hạn số hàng thiết bị
+- Có thể resize chiều cao sơ đồ phòng bằng chuột (kéo thanh chia)
+- Các thiết bị xếp từ trái sang phải, tự động xuống dòng
+- Đồng bộ trạng thái thiết bị giữa popup, panel, sơ đồ phòng
 
 ## 📖 Hướng dẫn sử dụng
 

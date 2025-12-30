@@ -6,10 +6,14 @@ Tài liệu này giải thích chi tiết các Design Patterns được sử d�
 
 ## 1. 🔷 Singleton Pattern
 
-### Vị trí: `application/device_controller.py` - Class `DeviceController`
+
+### Vị trí:
+- `application/device_controller.py` - Class `DeviceController`
+- `presentation/main_window.py`, `dialogs/`, `panels/` - GUI module hóa
 
 ### Mục đích:
 Đảm bảo chỉ có **1 instance duy nhất** của DeviceController trong toàn bộ ứng dụng.
+
 
 ### Implementation:
 
@@ -50,10 +54,14 @@ print(controller1 is controller2)  # True - cùng 1 object!
 
 ## 2. 👁️ Observer Pattern
 
-### Vị trí: `application/device_controller.py` - Class `Observer` (interface)
+
+### Vị trí:
+- `application/device_controller.py` - Class `Observer` (interface)
+- `presentation/main_window.py`, `panels/device_control_panel.py`, `room_visualization.py` - GUI đồng bộ qua observer
 
 ### Mục đích:
 Cho phép GUI **tự động cập nhật** khi device thay đổi trạng thái, không cần polling.
+
 
 ### Implementation:
 
@@ -88,7 +96,10 @@ class MainWindow(tk.Tk, Observer):
         self.device_panels[device_id].update_display()
 ```
 
+
 ### Lý do sử dụng:
+- Đồng bộ UI nhiều nơi: thay đổi từ popup, panel, sơ đồ phòng đều cập nhật ngay
+- GUI module hóa, dễ mở rộng observer mới
 - ✅ **Loose coupling**: GUI không cần biết về Device implementation
 - ✅ **Real-time updates**: Không cần polling, tiết kiệm CPU
 - ✅ **Scalable**: Dễ dàng thêm observers mới (VD: Logger, Database)

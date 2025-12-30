@@ -3,7 +3,12 @@
 ## 🎯 Tổng quan
 File `gui.py` gốc (1221 dòng) đã được chia thành cấu trúc module để dễ bảo trì và phát triển hơn.
 
-## 📁 Cấu trúc thư mục
+
+## 🆕 Tính năng giao diện mới
+- Sơ đồ phòng (Room Visualization) không giới hạn số hàng thiết bị, tự động xuống dòng
+- Có thể resize chiều cao sơ đồ phòng bằng chuột (kéo thanh chia)
+- Các thiết bị xếp từ trái sang phải
+- Đồng bộ trạng thái thiết bị giữa popup, panel, sơ đồ phòng
 
 ```
 presentation/
@@ -25,6 +30,7 @@ presentation/
 ```
 
 ## 📦 Các module
+
 
 ### 1. **dialogs/** - Các hộp thoại
 
