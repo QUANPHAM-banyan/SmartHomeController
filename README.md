@@ -227,25 +227,3 @@ Nếu gặp lỗi:
 
 Đồ án môn học - Đồ án thiết kế 1
 Đề tài: Mô phỏng hệ thống điều khiển thiết bị IoT trong gia đình
-
-## 📝 License
-
-Free to use for educational purposes.
-
----
-
-## 🎯 Checklist hoàn thành
-
-- [x] Thiết kế kiến trúc 3 lớp
-- [x] Implement BaseDevice với Template Method Pattern
-- [x] Implement Light, Fan, Door simulators
-- [x] Implement DeviceController với Singleton Pattern
-- [x] Implement Observer Pattern cho GUI notification
-- [x] Implement TimerManager với Threading
-- [x] Tạo GUI với Tkinter
-- [x] Hiển thị trạng thái real-time
-- [x] Chức năng hẹn giờ
-- [x] Testing và debugging
-- [x] Viết documentation
-
-**🎉 Hoàn thành 100%!**
