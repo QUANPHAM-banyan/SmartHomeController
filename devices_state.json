@@ -1,0 +1,82 @@
+{
+  "version": "1.0",
+  "last_saved": "2026-01-29T22:54:51.482142",
+  "total_devices": 7,
+  "rooms": [
+    "Bếp",
+    "Cửa ra vào",
+    "Phòng khách",
+    "Phòng ngủ"
+  ],
+  "devices": [
+    {
+      "device_id": "light_001",
+      "name": "Đèn phòng khách",
+      "room": "Phòng khách",
+      "is_on": true,
+      "last_update": "2026-01-29T22:53:30.433297",
+      "brightness": 80,
+      "device_type": "light"
+    },
+    {
+      "device_id": "light_002",
+      "name": "Đèn phòng ngủ",
+      "room": "Phòng ngủ",
+      "is_on": false,
+      "last_update": "2026-01-29T22:53:35.259420",
+      "brightness": 60,
+      "device_type": "light"
+    },
+    {
+      "device_id": "light_003",
+      "name": "Đèn bếp",
+      "room": "Bếp",
+      "is_on": false,
+      "last_update": "2026-01-29T22:53:30.434297",
+      "brightness": 100,
+      "device_type": "light"
+    },
+    {
+      "device_id": "fan_001",
+      "name": "Quạt phòng khách",
+      "room": "Phòng khách",
+      "is_on": true,
+      "last_update": "2026-01-29T22:53:30.435295",
+      "speed": 2,
+      "speed_name": "Trung bình",
+      "device_type": "fan"
+    },
+    {
+      "device_id": "fan_002",
+      "name": "Quạt phòng ngủ",
+      "room": "Phòng ngủ",
+      "is_on": true,
+      "last_update": "2026-01-29T22:54:48.911507",
+      "speed": 3,
+      "speed_name": "Cao",
+      "device_type": "fan"
+    },
+    {
+      "device_id": "door_001",
+      "name": "Cửa chính",
+      "room": "Cửa ra vào",
+      "is_on": false,
+      "last_update": "2026-01-29T22:53:30.436295",
+      "state": "closed",
+      "state_name": "Đóng",
+      "is_locked": true,
+      "device_type": "door"
+    },
+    {
+      "device_id": "door_002",
+      "name": "Cửa phòng ngủ",
+      "room": "Phòng ngủ",
+      "is_on": true,
+      "last_update": "2026-01-29T22:53:37.315531",
+      "state": "open",
+      "state_name": "Mở",
+      "is_locked": false,
+      "device_type": "door"
+    }
+  ]
+}

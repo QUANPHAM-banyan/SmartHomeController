@@ -125,6 +125,12 @@ class DeviceController:
                 else:
                     print(f"❌ Thiết bị {device.name} không hỗ trợ lock")
                     return False
+            elif command == "lock_with_close":
+                if hasattr(device, 'lock_with_close'):
+                    result = device.lock_with_close()
+                else:
+                    print(f"❌ Thiết bị {device.name} không hỗ trợ lock_with_close")
+                    return False
             elif command == "unlock":
                 if hasattr(device, 'unlock'):
                     result = device.unlock()

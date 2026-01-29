@@ -18,6 +18,8 @@ class TimerPanel(ttk.LabelFrame):
         super().__init__(parent, text="⏰ Hẹn giờ", padding="10")
         self.controller = controller
         self.timer_manager = timer_manager
+        self.action_mapping = {}  # Map tên hiển thị -> action thực tế
+        self.timer_id_list = []  # List timer_id theo thứ tự trong listbox
         
         self._create_widgets()
     
@@ -27,6 +29,7 @@ class TimerPanel(ttk.LabelFrame):
         ttk.Label(self, text="Thiết bị:").grid(row=0, column=0, sticky="w", pady=5)
         self.device_combo = ttk.Combobox(self, state="readonly", width=20)
         self.device_combo.grid(row=0, column=1, pady=5, padx=5)
+        self.device_combo.bind("<<ComboboxSelected>>", self._on_device_selected)
         
         # Action selection
         ttk.Label(self, text="Hành động:").grid(row=1, column=0, sticky="w", pady=5)
@@ -81,8 +84,9 @@ class TimerPanel(ttk.LabelFrame):
             messagebox.showerror("Lỗi", "Không tìm thấy thiết bị")
             return
         
-        # Get action
-        action = self.action_combo.get()
+        # Get action - chuyển đổi từ tên hiển thị sang action thực tế
+        action_display = self.action_combo.get()
+        action = self.action_mapping.get(action_display, action_display)
         
         # Calculate delay in seconds
         time_value = self.time_var.get()
@@ -105,12 +109,55 @@ class TimerPanel(ttk.LabelFrame):
             messagebox.showwarning("Cảnh báo", "Vui lòng chọn timer cần hủy")
             return
         
-        timer_text = self.timer_listbox.get(selection[0])
-        timer_id = timer_text.split("]")[0][1:]  # Extract timer_id from [timer_1]
+        # Lấy timer_id từ list theo index
+        index = selection[0]
+        if index >= len(self.timer_id_list):
+            messagebox.showerror("Lỗi", "Không tìm thấy timer")
+            return
+        
+        timer_id = self.timer_id_list[index]
         
         if self.timer_manager.cancel_timer(timer_id):
             messagebox.showinfo("Thành công", "Đã hủy timer")
             self.refresh_timer_list()
+    
+    def _on_device_selected(self, event=None):
+        """Xử lý khi chọn thiết bị - cập nhật danh sách hành động."""
+        device_name = self.device_combo.get()
+        if not device_name:
+            return
+        
+        # Tìm thiết bị
+        devices = self.controller.get_all_devices()
+        device = next((d for d in devices if d.name == device_name), None)
+        
+        if not device:
+            return
+        
+        # Cập nhật danh sách hành động dựa trên loại thiết bị
+        device_type = device.__class__.__name__
+        
+        if device_type == "Door":
+            # Cửa có: mở, đóng, khóa
+            actions = [
+                ("Mở cửa", "turn_on"),
+                ("Đóng cửa", "turn_off"),
+                ("Khóa cửa", "lock")
+            ]
+            self.action_combo['values'] = [action[0] for action in actions]
+            self.action_combo.current(0)
+            # Lưu mapping
+            self.action_mapping = {action[0]: action[1] for action in actions}
+        else:
+            # Các thiết bị khác: bật, tắt
+            actions = [
+                ("Bật", "turn_on"),
+                ("Tắt", "turn_off")
+            ]
+            self.action_combo['values'] = [action[0] for action in actions]
+            self.action_combo.current(0)
+            # Lưu mapping
+            self.action_mapping = {action[0]: action[1] for action in actions}
     
     def refresh_device_list(self):
         """Làm mới danh sách thiết bị."""
@@ -119,11 +166,14 @@ class TimerPanel(ttk.LabelFrame):
         self.device_combo['values'] = device_names
         if device_names:
             self.device_combo.current(0)
+            self._on_device_selected()  # Cập nhật danh sách hành động
     
     def refresh_timer_list(self):
         """Làm mới danh sách timer."""
         self.timer_listbox.delete(0, tk.END)
+        self.timer_id_list.clear()
         
         timers = self.timer_manager.get_active_timers()
         for task in sorted(timers, key=lambda t: t.scheduled_time):
             self.timer_listbox.insert(tk.END, str(task))
+            self.timer_id_list.append(task.timer_id)

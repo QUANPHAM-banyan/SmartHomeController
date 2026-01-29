@@ -43,7 +43,7 @@ class TimerTask:
         """String representation."""
         remaining = self.time_remaining()
         minutes, seconds = divmod(remaining, 60)
-        return f"{self.device_name} - {self.action} (còn {minutes}p {seconds}s)"
+        return f"[{self.timer_id}] {self.device_name} - {self.action} (còn {minutes}p {seconds}s)"
 
 
 class TimerManager:
@@ -136,8 +136,14 @@ class TimerManager:
         """
         print(f"\n⏰ TIMER KÍCH HOẠT: {timer_id}")
         
-        # Execute command
-        success = self.controller.control_device(device_id, action)
+        # Kiểm tra nếu là hành động khóa cửa, sử dụng lock_with_close
+        device = self.controller.get_device(device_id)
+        if device and device.__class__.__name__ == "Door" and action == "lock":
+            # Sử dụng lock_with_close để đảm bảo cửa đóng và khóa
+            success = device.lock_with_close()
+        else:
+            # Execute command bình thường
+            success = self.controller.control_device(device_id, action)
         
         if success:
             print(f"✅ Timer thực thi thành công: {action} trên {device_id}")

@@ -1,7 +1,10 @@
 # Smart Home Controller - Requirements
 
-# Không có external dependencies!
-# Tất cả sử dụng Python built-in libraries:
+# API Server dependencies
+flask>=2.3.0
+flask-cors>=4.0.0
+
+# Core dependencies (built-in libraries):
 # - tkinter (GUI framework) - built-in
 # - threading (Timer system) - built-in
 # - abc (Abstract Base Classes) - built-in
@@ -15,5 +18,7 @@
 # Để chạy trên Linux, có thể cần cài:
 # sudo apt-get install python3-tk
 
-# Không cần chạy pip install!
-# Chỉ cần: python main.py
+# Cài đặt:
+# pip install -r requirements.txt
+# hoặc chỉ cài Flask:
+# pip install flask flask-cors

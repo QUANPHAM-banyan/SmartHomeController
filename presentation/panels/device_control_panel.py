@@ -157,8 +157,8 @@ class DeviceControlPanel(ttk.Frame):
         self.controller.control_device(self.device_id, "turn_off")
     
     def _on_lock(self):
-        """Xử lý khóa cửa."""
-        self.controller.control_device(self.device_id, "lock")
+        """Xử lý khóa cửa (tự động đóng và khóa)."""
+        self.controller.control_device(self.device_id, "lock_with_close")
     
     def _on_unlock(self):
         """Xử lý mở khóa cửa."""

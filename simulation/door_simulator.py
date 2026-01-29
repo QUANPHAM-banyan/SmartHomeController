@@ -111,6 +111,32 @@ class Door(BaseDevice):
         print(f"🔒 {self.name} đã KHÓA")
         return True
     
+    def lock_with_close(self) -> bool:
+        """Đóng cửa (nếu đang mở) và khóa.
+        
+        Phương thức này được sử dụng cho hẹn giờ khóa cửa,
+        đảm bảo cửa sẽ đóng và khóa bất kể trạng thái hiện tại.
+        
+        Returns:
+            True (luôn thành công)
+        """
+        # Nếu cửa đang mở, đóng lại trước
+        if self.state == self.STATE_OPEN:
+            print(f"🚪 {self.name} - Đang đóng cửa trước khi khóa...")
+            self.state = self.STATE_CLOSED
+            self.is_on = False
+        
+        # Khóa cửa
+        if not self.is_locked:
+            self.is_locked = True
+            self.state = self.STATE_LOCKED
+            self._update_timestamp()
+            print(f"🔒 {self.name} đã ĐÓNG VÀ KHÓA")
+        else:
+            print(f"🔒 {self.name} đã KHÓA (cửa đã khóa từ trước)")
+        
+        return True
+    
     def unlock(self) -> bool:
         """Mở khóa cửa.
         

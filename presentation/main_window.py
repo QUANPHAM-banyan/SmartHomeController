@@ -12,22 +12,27 @@ from presentation.room_visualization import RoomCanvas
 class MainWindow(tk.Tk, Observer):
     """Cửa sổ chính của ứng dụng."""
     
-    def __init__(self, controller, timer_manager):
+    def __init__(self, controller, timer_manager, storage_manager=None):
         """Khởi tạo cửa sổ chính.
         
         Args:
             controller: DeviceController instance
             timer_manager: TimerManager instance
+            storage_manager: StorageManager instance (optional)
         """
         super().__init__()
         
         self.controller = controller
         self.timer_manager = timer_manager
+        self.storage_manager = storage_manager
         self.device_panels: Dict[str, DeviceControlPanel] = {}
         self.current_room = "Tất cả"
         
         # Register as observer
         self.controller.register_observer(self)
+        
+        # Register protocol handler for window close
+        self.protocol("WM_DELETE_WINDOW", self._on_closing)
         
         self._setup_window()
         self._create_menu()
@@ -389,6 +394,20 @@ class MainWindow(tk.Tk, Observer):
         
         # Update status bar
         self._update_status()
+    
+    def _on_closing(self):
+        """Xử lý khi đóng cửa sổ - tự động lưu trạng thái."""
+        try:
+            # Auto-save state
+            if self.storage_manager:
+                print("\n💾 Đang lưu trạng thái trước khi đóng...")
+                self.storage_manager.save_state(self.controller)
+                print("✅ Đã lưu trạng thái thành công!")
+        except Exception as e:
+            print(f"⚠️ Không thể lưu trạng thái: {e}")
+        finally:
+            # Close window
+            self.destroy()
     
     def run(self):
         """Chạy ứng dụng."""
